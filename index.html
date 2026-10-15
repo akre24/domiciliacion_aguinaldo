@@ -53,6 +53,11 @@ a{color:var(--gold)}
 .tabs button{font:inherit;font-weight:800;cursor:pointer;border:2px solid #1f5a40;background:var(--pine2);color:var(--ink);padding:10px 18px;border-radius:12px;transition:.15s}
 .tabs button:hover{border-color:var(--gold)}
 .tabs button[aria-selected=true]{background:var(--gold);color:#2a1a08;border-color:var(--gold)}
+.tabs button .tot{display:inline-block;margin-left:8px;padding:1px 9px;border-radius:99px;background:#08241a;color:var(--gold2);font-size:.85rem}
+.tabs button[aria-selected=true] .tot{background:#2a1a08;color:var(--gold2)}
+.total{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--gold);color:#2a1a08;border-radius:14px;padding:12px 18px;margin:6px 0 14px}
+.total .big{font-family:var(--display);font-size:2.4rem;line-height:1}
+.total span{font-weight:600}
 .meta{color:var(--mute);margin-bottom:14px}
 .meta b{color:var(--gold2)}
 
@@ -130,6 +135,7 @@ footer{margin:48px 0 30px;color:var(--mute);font-size:.85rem;font-style:italic;t
 
   <section aria-label="Ranking por equipo">
     <div class="tabs" role="tablist" id="tabs"></div>
+    <div class="total" id="total"></div>
     <p class="meta" id="meta"></p>
     <div class="podium" id="podium"></div>
     <div class="board scroll" id="board"></div>
@@ -159,7 +165,7 @@ footer{margin:48px 0 30px;color:var(--mute);font-size:.85rem;font-style:italic;t
 const CONFIG = {
   // Pega aquí el link del Google Sheet publicado como CSV.
   // Si lo dejas vacío, el tablero muestra datos de ejemplo.
-  csvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSnGfIigI-wjBuGHmAuNFtWRIquxzji6_IHMW8E8ml2Y0tIRfR8g7uR88B3BiP5AAKCPbaqqFttaYkW/pub?output=csv",
+  csvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSnGfIigI-wjBuGHmAuNFtWRIquxzji6_IHMW8E8ml2Y0tIRfR8g7uR88B3BiP5AAKCPbaqqFttaYkW/pubhtml",
   inicio: "2026-09-17T00:00:00",
   fin: "2026-10-31T23:59:59",
   premios: [200, 175, 150],
@@ -252,9 +258,11 @@ async function cargar(){
   }
 }
 
+const totalDe = n => equipos[n].personas.reduce((s, p) => s + p[1], 0);
+
 function pintarTabs(){
   $("tabs").innerHTML = Object.keys(equipos).map(n =>
-    `<button role="tab" aria-selected="${n === actual}" data-n="${esc(n)}">${esc(n)}</button>`).join("");
+    `<button role="tab" aria-selected="${n === actual}" data-n="${esc(n)}">${esc(n)}<span class="tot" title="Domiciliaciones del equipo">${totalDe(n)}</span></button>`).join("");
   $("tabs").querySelectorAll("button").forEach(b => b.onclick = () => { actual = b.dataset.n; render(); });
 }
 
@@ -262,6 +270,8 @@ function render(){
   pintarTabs();
   const eq = equipos[actual];
   const lista = eq.personas.map(([n, c]) => ({ n, c })).sort((a, b) => b.c - a.c);
+  const tot = totalDe(actual);
+  $("total").innerHTML = `<div class="big">${tot}</div><span>domiciliaciones en total de ${esc(actual)}<br>${lista.length} colaboradores participando</span>`;
   $("meta").innerHTML = `Mínimo para ganar: <b>${eq.minimo} domiciliaciones</b>. Solo cuentan quienes lo alcanzan.`;
 
   // Podio (orden visual 2-1-3)
@@ -285,7 +295,7 @@ function render(){
       const pct = Math.min(100, Math.round(p.c / eq.minimo * 100));
       return `<div class="row ${i < 3 ? "top3" : ""}">
         <span class="pos">${i < 3 ? medals[i] : i + 1}</span>
-        <span><b>${esc(p.n)}</b><div class="tag">+$${p.c * CONFIG.extraPorDomiciliacion} USD por domiciliaciones</div></span>
+        <span><b>${esc(p.n)}</b></span>
         <span class="cnt">${p.c}</span>
         <span><div class="bar ${ok ? "ok" : ""}" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pct}%"></i></div>
         <div class="tag">${ok ? "Mínimo alcanzado ✓" : `Faltan ${eq.minimo - p.c}`}</div></span>
