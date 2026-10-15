@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¡Domicilia y duplica tu aguinaldo!</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎁</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Figtree:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pine:#0a2a1c; --pine2:#103b28; --leaf:#0cc12a; --gold:#f4b934; --gold2:#ffe08a;
+  --paper:#fff7e2; --berry:#d2382f; --ink:#f3ead0; --mute:#a9c2b0;
+  --display:"Bagel Fat One","Trebuchet MS",sans-serif; --body:"Figtree","Segoe UI",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--pine);color:var(--ink);line-height:1.5;
+  background-image:radial-gradient(circle at 20% 0,#14513a 0,transparent 45%),radial-gradient(circle at 90% 30%,#0f3d2a 0,transparent 40%)}
+a{color:var(--gold)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+
+/* guirnalda */
+.lights{display:flex;justify-content:space-around;padding-top:6px;overflow:hidden;border-top:6px solid var(--pine2)}
+.lights i{width:14px;height:20px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;margin-top:-2px;position:relative;animation:tw 2.4s infinite}
+.lights i:nth-child(4n+1){background:var(--berry);color:var(--berry)}
+.lights i:nth-child(4n+2){background:var(--gold);color:var(--gold);animation-delay:.6s}
+.lights i:nth-child(4n+3){background:var(--leaf);color:var(--leaf);animation-delay:1.2s}
+.lights i:nth-child(4n){background:#fff;color:#fff;animation-delay:1.8s}
+.lights i{box-shadow:0 0 14px 2px currentColor}
+@keyframes tw{50%{opacity:.35}}
+
+/* hero */
+.hero{padding:44px 0 28px;display:grid;gap:28px;grid-template-columns:1.4fr 1fr;align-items:center}
+.hero h1{font-family:var(--display);font-weight:400;font-size:clamp(2.4rem,6vw,4.2rem);line-height:1.02;color:var(--gold2);text-wrap:balance}
+.hero h1 b{font-weight:400;display:inline-block;background:var(--leaf);color:#04210f;padding:0 .22em;border-radius:.2em;transform:rotate(-2deg)}
+.hero p{margin-top:16px;color:var(--mute);font-size:1.05rem;max-width:46ch}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chip{background:var(--pine2);border:1px solid #1f5a40;border-radius:99px;padding:6px 14px;font-weight:600;font-size:.9rem}
+
+/* cuenta regresiva = sobre de aguinaldo */
+.sobre{background:var(--paper);color:#2a1a08;border-radius:14px;padding:22px 20px 18px;position:relative;box-shadow:0 18px 40px #0008;transform:rotate(1.5deg)}
+.sobre::before{content:"";position:absolute;inset:0 0 auto;height:46px;background:linear-gradient(to bottom right,transparent 49%,#eadcae 50%) left/50% 100% no-repeat,linear-gradient(to bottom left,transparent 49%,#eadcae 50%) right/50% 100% no-repeat;border-radius:14px 14px 0 0}
+.sobre h2{font-family:var(--display);font-weight:400;font-size:1.15rem;margin-top:36px;text-align:center;color:var(--berry)}
+.count{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;text-align:center}
+.count div{background:#fff;border:2px solid var(--gold);border-radius:10px;padding:8px 0}
+.count strong{display:block;font-family:var(--display);font-weight:400;font-size:1.9rem;line-height:1}
+.count span{font-size:.75rem;font-weight:600}
+.sobre small{display:block;text-align:center;margin-top:10px;font-weight:600}
+
+/* tabs */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 8px}
+.tabs button{font:inherit;font-weight:800;cursor:pointer;border:2px solid #1f5a40;background:var(--pine2);color:var(--ink);padding:10px 18px;border-radius:12px;transition:.15s}
+.tabs button:hover{border-color:var(--gold)}
+.tabs button[aria-selected=true]{background:var(--gold);color:#2a1a08;border-color:var(--gold)}
+.meta{color:var(--mute);margin-bottom:14px}
+.meta b{color:var(--gold2)}
+
+/* podio */
+.podium{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:12px;align-items:end;margin:6px 0 26px}
+.pod{border-radius:14px 14px 6px 6px;padding:16px 12px;text-align:center;color:#2a1a08;display:flex;flex-direction:column;justify-content:flex-end;min-height:170px;position:relative}
+.pod .m{font-size:2.2rem;line-height:1}
+.pod .n{font-weight:800;margin-top:4px;overflow-wrap:anywhere}
+.pod .d{font-size:.85rem;font-weight:600}
+.pod .p{font-family:var(--display);font-size:1.6rem}
+.p1{background:linear-gradient(#ffe08a,#f4b934);min-height:210px}
+.p2{background:linear-gradient(#f1f1f1,#bfc7cc)}
+.p3{background:linear-gradient(#e9b27c,#c07a3e)}
+
+/* tabla */
+.board{background:#0d3323;border:1px solid #1f5a40;border-radius:16px;overflow:hidden}
+.row{display:grid;grid-template-columns:44px 1fr 90px 1.1fr;gap:12px;align-items:center;padding:12px 16px;border-top:1px solid #174632}
+.row:first-child{border-top:0}
+.row.head{background:var(--pine2);font-weight:800;font-size:.85rem;color:var(--mute)}
+.row .pos{font-family:var(--display);font-size:1.2rem;color:var(--gold)}
+.row .cnt{font-weight:800;text-align:right}
+.bar{height:12px;background:#08241a;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--leaf);border-radius:99px;transition:width .8s}
+.bar.ok i{background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.tag{font-size:.75rem;color:var(--mute);margin-top:3px}
+.row.top3{background:#123d2b}
+.scroll{overflow-x:auto}
+.scroll .row{min-width:520px}
+
+/* info */
+h2.sec{font-family:var(--display);font-weight:400;font-size:1.8rem;color:var(--gold2);margin:44px 0 14px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.card{background:var(--pine2);border:1px solid #1f5a40;border-radius:16px;padding:18px}
+.card h3{font-size:1.05rem;margin-bottom:6px}
+.card p{color:var(--mute);font-size:.95rem}
+.card .big{font-family:var(--display);font-size:2rem;color:var(--leaf)}
+.card.gold{background:var(--gold);color:#2a1a08;border:0}
+.card.gold p,.card.gold .big{color:#2a1a08}
+footer{margin:48px 0 30px;color:var(--mute);font-size:.85rem;font-style:italic;text-align:center}
+
+@media(max-width:720px){
+  .hero{grid-template-columns:1fr}
+  .sobre{transform:none}
+  .podium{grid-template-columns:1fr;}
+  .p1{order:-1;min-height:150px}.pod{min-height:120px}
+}
+@media(prefers-reduced-motion:reduce){.lights i{animation:none}.bar i{transition:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="lights" aria-hidden="true" id="lights"></div>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <h1>¡Domicilia y duplica tu <b>aguinaldo</b>!</h1>
+      <p>Cada domiciliación te acerca a tu aguinaldo. Los 3 colaboradores con más domiciliaciones de cada equipo se llevan el bono.</p>
+      <div class="chips">
+        <span class="chip">📅 17 sep – 31 oct 2026</span>
+        <span class="chip">👥 4 equipos</span>
+        <span class="chip">💵 +5 USD por domiciliación</span>
+      </div>
+    </div>
+    <div class="sobre" role="timer" aria-live="off">
+      <h2>Faltan para el cierre</h2>
+      <div class="count">
+        <div><strong id="d">0</strong><span>días</span></div>
+        <div><strong id="h">0</strong><span>horas</span></div>
+        <div><strong id="m">0</strong><span>min</span></div>
+        <div><strong id="s">0</strong><span>seg</span></div>
+      </div>
+      <small id="estado"></small>
+    </div>
+  </section>
+
+  <section aria-label="Ranking por equipo">
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <p class="meta" id="meta"></p>
+    <div class="podium" id="podium"></div>
+    <div class="board scroll" id="board"></div>
+    <p class="meta" style="margin-top:10px">Última actualización: <b id="upd"></b></p>
+  </section>
+
+  <h2 class="sec">¿Cómo ganas?</h2>
+  <div class="cards">
+    <div class="card"><div class="big">🥇 $200</div><h3>1.er lugar</h3><p>USD, por equipo.</p></div>
+    <div class="card"><div class="big">🥈 $175</div><h3>2.º lugar</h3><p>USD, por equipo.</p></div>
+    <div class="card"><div class="big">🥉 $150</div><h3>3.er lugar</h3><p>USD, por equipo.</p></div>
+    <div class="card gold"><div class="big">+$5</div><h3>Por cada domiciliación</h3><p>Adicional durante la vigencia. Pago efectivo al 10 de diciembre.</p></div>
+  </div>
+
+  <h2 class="sec">¿Cuándo recibo mi bono?</h2>
+  <div class="cards">
+    <div class="card"><h3>💵 Bonos por ranking</h3><p>Se pagan el 15 o 30 de diciembre de 2026, según el calendario de pago de variable de cada país.</p></div>
+    <div class="card"><h3>🎁 Bono de $5 USD</h3><p>Pago efectivo al 10 de diciembre de 2026.</p></div>
+    <div class="card"><h3>📌 Mínimo para participar</h3><p>Cobranza (CXC): 8 domiciliaciones.<br>EE: 15 domiciliaciones.</p></div>
+  </div>
+
+  <footer>Los bonos serán pagados en moneda local o bajo el esquema de pago correspondiente en cada país.</footer>
+</main>
+
+<script>
+/* ============ EDITA AQUÍ ============ */
+const CONFIG = {
+  // Pega aquí el link del Google Sheet publicado como CSV.
+  // Si lo dejas vacío, el tablero muestra datos de ejemplo.
+  csvUrl: "",
+  inicio: "2026-09-17T00:00:00",
+  fin: "2026-10-31T23:59:59",
+  premios: [200, 175, 150],
+  extraPorDomiciliacion: 5,
+  // Mínimo de domiciliaciones según el inicio del nombre del equipo
+  minimos: { "Cobranza": 8, "EE": 15 },
+  refrescarCadaMin: 5
+};
+/* ================================== */
+
+const DEMO_CSV = `equipo,nombre,domiciliaciones
+Cobranza MX,Nombre Apellido,12
+Cobranza MX,Nombre Apellido,10
+Cobranza MX,Nombre Apellido,9
+Cobranza MX,Nombre Apellido,6
+Cobranza Latam,Nombre Apellido,11
+Cobranza Latam,Nombre Apellido,8
+Cobranza Latam,Nombre Apellido,5
+EE MX,Nombre Apellido,18
+EE MX,Nombre Apellido,16
+EE MX,Nombre Apellido,11
+EE Latam,Nombre Apellido,20
+EE Latam,Nombre Apellido,14
+EE Latam,Nombre Apellido,9`;
+
+const $ = id => document.getElementById(id);
+const medals = ["🥇","🥈","🥉"];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const norm = s => s.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+let equipos = {}, actual = null;
+
+$("lights").innerHTML = "<i></i>".repeat(28);
+
+function parseCSV(t){
+  const rows = []; let r = [], c = "", q = false;
+  for(let i = 0; i < t.length; i++){
+    const ch = t[i];
+    if(q){
+      if(ch === '"'){ if(t[i+1] === '"'){ c += '"'; i++; } else q = false; }
+      else c += ch;
+    } else if(ch === '"') q = true;
+    else if(ch === ","){ r.push(c); c = ""; }
+    else if(ch === "\n" || ch === "\r"){ if(ch === "\r" && t[i+1] === "\n") i++; r.push(c); rows.push(r); r = []; c = ""; }
+    else c += ch;
+  }
+  if(c || r.length){ r.push(c); rows.push(r); }
+  return rows.filter(x => x.some(v => v.trim()));
+}
+
+function minimoDe(equipo){
+  const hit = Object.entries(CONFIG.minimos).find(([k]) => norm(equipo).startsWith(norm(k)));
+  return hit ? hit[1] : 1;
+}
+
+function construir(csv){
+  const rows = parseCSV(csv);
+  const h = (rows.shift() || []).map(norm);
+  const ie = h.indexOf("equipo"), inm = h.indexOf("nombre"), id = h.findIndex(x => x.startsWith("domic"));
+  if(ie < 0 || inm < 0 || id < 0) throw new Error("La hoja debe tener las columnas: equipo, nombre, domiciliaciones");
+  const out = {};
+  rows.forEach(r => {
+    const e = (r[ie] || "").trim(), n = (r[inm] || "").trim();
+    const c = parseInt((r[id] || "").replace(/[^\d-]/g, ""), 10);
+    if(!e || !n) return;
+    (out[e] = out[e] || { minimo: minimoDe(e), personas: [] }).personas.push([n, isNaN(c) ? 0 : c]);
+  });
+  return out;
+}
+
+async function cargar(){
+  try{
+    let txt;
+    if(CONFIG.csvUrl){
+      const res = await fetch(CONFIG.csvUrl + (CONFIG.csvUrl.includes("?") ? "&" : "?") + "t=" + Date.now());
+      if(!res.ok) throw new Error("Error " + res.status + " al leer la hoja. Revisa que esté publicada como CSV.");
+      txt = await res.text();
+    } else txt = DEMO_CSV;
+    const nuevo = construir(txt);
+    const nombres = Object.keys(nuevo);
+    if(!nombres.length) throw new Error("La hoja no tiene filas con datos.");
+    equipos = nuevo;
+    if(!equipos[actual]) actual = nombres[0];
+    $("upd").textContent = new Date().toLocaleString("es-MX", { dateStyle: "medium", timeStyle: "short" }) + (CONFIG.csvUrl ? "" : " (datos de ejemplo)");
+    render();
+  } catch(e){
+    console.warn(e);
+    if(!Object.keys(equipos).length){
+      $("board").innerHTML = `<div style="padding:18px"><b>No se pudieron cargar los datos.</b><div class="tag">${esc(e.message)}</div></div>`;
+    }
+  }
+}
+
+function pintarTabs(){
+  $("tabs").innerHTML = Object.keys(equipos).map(n =>
+    `<button role="tab" aria-selected="${n === actual}" data-n="${esc(n)}">${esc(n)}</button>`).join("");
+  $("tabs").querySelectorAll("button").forEach(b => b.onclick = () => { actual = b.dataset.n; render(); });
+}
+
+function render(){
+  pintarTabs();
+  const eq = equipos[actual];
+  const lista = eq.personas.map(([n, c]) => ({ n, c })).sort((a, b) => b.c - a.c);
+  $("meta").innerHTML = `Mínimo para ganar: <b>${eq.minimo} domiciliaciones</b>. Solo cuentan quienes lo alcanzan.`;
+
+  // Podio (orden visual 2-1-3)
+  $("podium").innerHTML = [1, 0, 2].map(i => {
+    const p = lista[i];
+    if(!p) return "<div></div>";
+    const califica = p.c >= eq.minimo;
+    return `<div class="pod p${i+1}">
+      <div class="m">${medals[i]}</div>
+      <div class="n">${esc(p.n)}</div>
+      <div class="d">${p.c} domiciliaciones</div>
+      <div class="p">${califica ? "$" + CONFIG.premios[i] : "—"}</div>
+      ${califica ? "" : `<div class="d">Aún sin mínimo</div>`}
+    </div>`;
+  }).join("");
+
+  // Tabla
+  $("board").innerHTML = `<div class="row head"><span>#</span><span>Colaborador</span><span style="text-align:right">Domic.</span><span>Avance al mínimo</span></div>` +
+    lista.map((p, i) => {
+      const ok = p.c >= eq.minimo;
+      const pct = Math.min(100, Math.round(p.c / eq.minimo * 100));
+      return `<div class="row ${i < 3 ? "top3" : ""}">
+        <span class="pos">${i < 3 ? medals[i] : i + 1}</span>
+        <span><b>${esc(p.n)}</b><div class="tag">+$${p.c * CONFIG.extraPorDomiciliacion} USD por domiciliaciones</div></span>
+        <span class="cnt">${p.c}</span>
+        <span><div class="bar ${ok ? "ok" : ""}" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pct}%"></i></div>
+        <div class="tag">${ok ? "Mínimo alcanzado ✓" : `Faltan ${eq.minimo - p.c}`}</div></span>
+      </div>`;
+    }).join("");
+}
+
+function tick(){
+  const ahora = Date.now(), ini = new Date(CONFIG.inicio), fin = new Date(CONFIG.fin);
+  let t = fin - ahora;
+  $("estado").textContent = ahora < ini ? "La dinámica aún no inicia" : t <= 0 ? "La dinámica ha terminado" : "Cierra el 31 de octubre";
+  t = Math.max(0, t);
+  $("d").textContent = Math.floor(t / 864e5);
+  $("h").textContent = String(Math.floor(t / 36e5) % 24).padStart(2, "0");
+  $("m").textContent = String(Math.floor(t / 6e4) % 60).padStart(2, "0");
+  $("s").textContent = String(Math.floor(t / 1e3) % 60).padStart(2, "0");
+}
+
+cargar(); tick();
+setInterval(tick, 1000);
+setInterval(cargar, CONFIG.refrescarCadaMin * 60000);
+</script>
+</body>
+</html>
